@@ -17,7 +17,11 @@ export const typeDefs = `#graphql
     # pseudo endpoint
     type Query {
         reviews: [Review]
+        # specifica che per ottenere una singola review l'utente deve fornire una variabile id
+        review(id: ID!): Review
         games: [Game]
+        game(id: ID!): Game
         authors: [Author]
+        author(id: ID!): Author
     }
 `
