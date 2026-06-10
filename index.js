@@ -9,28 +9,53 @@ import { typeDefs } from "./schema.js";
 
 // resolvers
 const resolvers = {
+    // graph entry point resolvers
     Query: {
         reviews: () => {
-            return db.reviews
+            return db.reviews;
         },
         // _ sostituisce l'argomento parent, args ci permette di accedere a variabili passate dal FE
         // NOTE: prende anche context -> poco importante ATM
         review: (_, args) => {
             // in questo caso posso usare semplicemente metodo find js per trovare la review sulla base dell'id passato
-            return db.reviews.find(review => review.id == args.id)
+            return db.reviews.find((review) => review.id == args.id);
         },
         games: () => {
-            return db.games
+            return db.games;
         },
         game: (_, args) => {
-            return db.games.find(game => game.id == args.id)
+            return db.games.find((game) => game.id == args.id);
         },
         authors: () => {
-            return db.authors
+            return db.authors;
         },
         author: (_, args) => {
-            return db.authors.find(author => author.id == args.id)
+            return db.authors.find((author) => author.id == args.id);
         },
+    },
+    // we can navigate the graph to be more specific
+    Game: {
+        reviews: (parent) => {
+            return db.reviews.filter((review) => review.game_id == parent.id);
+        },
+    },
+    Mutation: {
+        deleteGame: (_, args) => {
+            db.games = db.games.filter((game) => game.id !== args.id);
+
+            return db.games;
+        },
+        addGame: (_, args) => {
+            let game = {
+                ...args.game,
+            }
+
+            game.id = 10;
+            
+            db.games.push(args.game)
+
+            return db.games
+        }
     },
 };
 
