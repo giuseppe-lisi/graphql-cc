@@ -10,14 +10,26 @@ import { typeDefs } from "./schema.js";
 // resolvers
 const resolvers = {
     Query: {
-        games: () => {
-            return db.games
-        },
         reviews: () => {
             return db.reviews
         },
+        // _ sostituisce l'argomento parent, args ci permette di accedere a variabili passate dal FE
+        // NOTE: prende anche context -> poco importante ATM
+        review: (_, args) => {
+            // in questo caso posso usare semplicemente metodo find js per trovare la review sulla base dell'id passato
+            return db.reviews.find(review => review.id == args.id)
+        },
+        games: () => {
+            return db.games
+        },
+        game: (_, args) => {
+            return db.games.find(game => game.id == args.id)
+        },
         authors: () => {
             return db.authors
+        },
+        author: (_, args) => {
+            return db.authors.find(author => author.id == args.id)
         },
     },
 };
